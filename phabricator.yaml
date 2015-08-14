@@ -9,6 +9,7 @@
     scm:
         - git:
             url: https://github.com/phacility/phabricator.git
+            skip-tag: true
             branches:
                 - origin/master
 - job:
