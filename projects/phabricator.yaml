@@ -5,6 +5,6 @@
         - arcanist
         - phabricator
     jobs:
-        - {name}-{subproject}-checkout
-        - {name}-{subproject}-test
-        - {name}-{subproject}-package
+        - '{name}-{subproject}-checkout'
+        - '{name}-{subproject}-test'
+        - '{name}-{subproject}-package'

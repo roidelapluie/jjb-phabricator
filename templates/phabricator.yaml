@@ -16,7 +16,11 @@
     name: '{name}-{subproject}-test'
     project-type: freestyle
     scm:
-        - phabricator
+        - git:
+            url: 'https://github.com/phacility/{subproject}.git'
+            skip-tag: true
+            branches:
+                - origin/master
     publishers:
         - trigger:
             project: '{name}-{subproject}-package'
@@ -24,4 +28,8 @@
     name: '{name}-{subproject}-package'
     project-type: freestyle
     scm:
-        - phabricator
+        - git:
+            url: 'https://github.com/phacility/{subproject}.git'
+            skip-tag: true
+            branches:
+                - origin/master
