@@ -1,7 +1,6 @@
 - project:
     name: Phabricator
     subproject:
-        - libphutil
         - arcanist
         - phabricator
     jobs:
