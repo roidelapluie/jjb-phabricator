@@ -1,8 +1,0 @@
-- project:
-    name: Phabricator
-    subproject:
-        - libphutil
-    jobs:
-        - '{name}-{subproject}-checkout'
-        - '{name}-{subproject}-test'
-        - '{name}-{subproject}-package'

@@ -1,0 +1,53 @@
+- job-template:
+    name: '{name}-{subproject}-checkout'
+    project-type: freestyle
+    scm:
+        - git:
+            url: 'https://github.com/phacility/{subproject}.git'
+            skip-tag: true
+            basedir: '{subproject}'
+            wipe-workspace: false
+            clean:
+                before: true
+            branches:
+                - origin/master
+    triggers:
+        - pollscm: "H/5 * * * *"
+    publishers:
+        - trigger-parameterized-builds:
+            - project:
+                - '{name}-{subproject}-test'
+              git-revision: true
+- job-template:
+    name: '{name}-{subproject}-test'
+    project-type: freestyle
+    scm:
+        - git:
+            url: 'https://github.com/phacility/{subproject}.git'
+            skip-tag: true
+            wipe-workspace: false
+            clean:
+                before: true
+            basedir: '{subproject}'
+    builders:
+        - shell: 'find . -name "*.php" -print0 | xargs -0 phpcs --report=junit > junit.xml || true'
+    publishers:
+        - trigger-parameterized-builds:
+            - project:
+                - '{name}-{subproject}-package'
+              git-revision: true
+        - junit:
+            results: 'junit.xml'
+- job-template:
+    name: '{name}-{subproject}-package'
+    project-type: freestyle
+    scm:
+        - git:
+            url: 'https://github.com/phacility/{subproject}.git'
+            skip-tag: true
+            wipe-workspace: false
+            clean:
+                before: true
+            basedir: '{subproject}'
+    builders:
+      - shell: '$(gem contents fpm|grep bin/fpm$ |head -n 1) --log debug -s dir -t rpm -n {name}-{subproject} --prefix /var/www/{name} -v $BUILD_NUMBER --iteration $GIT_COMMIT {subproject}'
